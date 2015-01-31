@@ -88,6 +88,7 @@ static void sanityChecks(Command cmd, double cutoff, double latticeConst, char l
 int main(int argc, char** argv)
 {
    // Prolog
+   MARKER_INIT;
    initParallel(&argc, &argv);
    profileStart(totalTimer);
    initSubsystems();
@@ -109,8 +110,7 @@ int main(int argc, char** argv)
 
    timestampBarrier("Starting simulation\n");
 
-   MARKER_INIT;
-   MARKER_START;
+   MARKER_START(getMyRank());
 
    // This is the CoMD main loop
    const int nSteps = sim->nSteps;
@@ -133,7 +133,7 @@ int main(int argc, char** argv)
       iStep += printRate;
    }
    profileStop(loopTimer);
-   MARKER_STOP;
+   MARKER_STOP(getMyRank());
 
    sumAtoms(sim);
 
