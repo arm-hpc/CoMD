@@ -111,6 +111,9 @@ int main(int argc, char** argv)
    timestampBarrier("Starting simulation\n");
 
    MARKER_START(getMyRank());
+#ifdef GEM5_MARKERS
+   barrierParallel();
+#endif
 
    // This is the CoMD main loop
    const int nSteps = sim->nSteps;
