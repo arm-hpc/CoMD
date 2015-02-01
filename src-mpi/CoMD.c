@@ -60,6 +60,8 @@
 #include "timestep.h"
 #include "constants.h"
 
+#include "marker_stub.h"
+
 #define REDIRECT_OUTPUT 0
 #define   MIN(A,B) ((A) < (B) ? (A) : (B))
 
@@ -84,6 +86,7 @@ static void sanityChecks(Command cmd, double cutoff, double latticeConst, char l
 int main(int argc, char** argv)
 {
    // Prolog
+   MARKER_INIT;
    initParallel(&argc, &argv);
    profileStart(totalTimer);
    initSubsystems();
@@ -104,6 +107,11 @@ int main(int argc, char** argv)
    timestampBarrier("Initialization Finished\n");
 
    timestampBarrier("Starting simulation\n");
+
+   MARKER_START(getMyRank());
+#ifdef GEM5_MARKERS
+   barrierParallel();
+#endif
 
    // This is the CoMD main loop
    const int nSteps = sim->nSteps;

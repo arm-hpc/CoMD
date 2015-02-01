@@ -16,7 +16,8 @@ DO_MPI = OFF
 ### own.  If you need any -L or -l switches to get C standard libraries
 ### (such as -lm for the math library) put them in C_LIB.
 CC = gcc
-CFLAGS = -std=c99 -fopenmp -march=armv8-a+fp+simd -fprefetch-loop-arrays -ftree-vectorize -fomit-frame-pointer -funsafe-math-optimizations -funroll-loops -fdump-tree-vect-all-all -ftree-vectorizer-verbose=6
+CFLAGS = -DARM_MARKERS -DGEM5_MARKERS -std=gnu99 -fopenmp -march=armv8-a+fp+simd -ftree-vectorize -fomit-frame-pointer -funsafe-math-optimizations -funroll-loops 
+#-fdump-tree-vect-all-all -ftree-vectorizer-verbose=6
 OPTFLAGS = -g -O5
 INCLUDES = 
 C_LIB = -lm
@@ -82,7 +83,7 @@ DEFAULT: ${CoMD_EXE}
 ${CoMD_EXE}: ${BIN_DIR} CoMD_info.h ${OBJECTS} 
 	${CC} ${CFLAGS} -o ${CoMD_EXE} ${OBJECTS} ${LDFLAGS}
 
-CoMD_info.h: Makefile
+CoMD_info.h: Makefile.aarch64.omp
 	./generate_info_header ${CoMD_VARIANT} "$(CC)" "$(CFLAGS)" "$(LDFLAGS)"
 
 ${BIN_DIR}:
