@@ -120,6 +120,7 @@ int main(int argc, char** argv)
    profileStart(loopTimer);
    for (; iStep<nSteps;)
    {
+      MARKER_BEGIN(iStep, getMyRank());
       startTimer(commReduceTimer);
       sumAtoms(sim);
       stopTimer(commReduceTimer);
@@ -129,12 +130,15 @@ int main(int argc, char** argv)
       startTimer(timestepTimer);
       timestep(sim, printRate, sim->dt);
       stopTimer(timestepTimer);
-
+      
+      MARKER_END(iStep, getMyRank());
       iStep += printRate;
    }
    profileStop(loopTimer);
-
    sumAtoms(sim);
+   
+   MARKER_STOP(getMyRank());
+
    printThings(sim, iStep, getElapsedTime(timestepTimer));
    timestampBarrier("Ending simulation\n");
 
